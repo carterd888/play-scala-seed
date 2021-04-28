@@ -1,26 +1,29 @@
 package controllers
 
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
-import play.api.mvc.ControllerComponents
+import play.api.mvc.{ControllerComponents}
 import uk.gov.hmrc.play.test.UnitSpec
-
 import play.api.test.FakeRequest
 import play.api.http.Status
 
-class ApplicationControllerSpec extends UnitSpec with GuiceOneAppPerTest {
+class ApplicationControllerSpec extends UnitSpec with GuiceOneAppPerTest{
   lazy val controllerComponents: ControllerComponents = app.injector.instanceOf[ControllerComponents]
 
   object TestApplicationController extends ApplicationController(
     controllerComponents
   )
-  "ApplicationController .index" should {
 
-   lazy val result = TestApplicationController.index()(FakeRequest())
+    "ApplicationController .index" should {
 
-    "return TODO" in {
-      status(result) shouldBe Status.NOT_IMPLEMENTED
+    lazy  val result = TestApplicationController.index()(FakeRequest())
+
+      "return TODO" in {
+        status(result) shouldBe Status.OK
+      }
     }
-  }
+
+
+
   "ApplicationController .create()" should {
 
   }
