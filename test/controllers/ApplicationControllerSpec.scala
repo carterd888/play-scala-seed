@@ -15,6 +15,7 @@ import org.mockito.Mockito._
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.GET
 import reactivemongo.api.commands.{LastError, WriteResult}
+import reactivemongo.core.errors.GenericDriverException
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -76,6 +77,27 @@ class ApplicationControllerSpec extends UnitSpec with GuiceOneAppPerTest with Mo
         )
         val result = TestApplicationController.create()(FakeRequest().withBody(jsonBody))
         status(result) shouldBe Status.BAD_REQUEST
+      }
+    }
+
+    "the mongo data creation failed" should {
+
+      val jsonBody: JsObject = Json.obj(
+        "_id" -> "abcd",
+        "name" -> "test name",
+        "description" -> "test description",
+        "numSales" -> 100
+      )
+
+      "return an error" in {
+
+        when(mockDataRepository.create(any()))
+          .thenReturn(Future.failed(GenericDriverException("Error")))
+
+        val result = TestApplicationController.create()(FakeRequest().withBody(jsonBody))
+
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        await(bodyOf(result)) shouldBe Json.obj("message" -> "Error adding item to Mongo").toString()
       }
     }
   }
