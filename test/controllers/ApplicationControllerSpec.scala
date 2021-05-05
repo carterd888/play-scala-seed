@@ -46,6 +46,7 @@ class ApplicationControllerSpec extends UnitSpec with GuiceOneAppPerTest with Mo
   "ApplicationController .index" should {
     "return OK" in {
 
+
       when(mockDataRepository.find(any())(any()))
         .thenReturn(Future(List(dataModel)))
 
