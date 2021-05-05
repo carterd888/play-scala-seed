@@ -218,26 +218,26 @@ class ApplicationControllerSpec extends UnitSpec with GuiceOneAppPerTest with Mo
       val result = TestApplicationController.delete("_id": String)(FakeRequest())
       status(result) shouldBe Status.ACCEPTED
     }
-  }
-  "the mongo data creation failed" should {
 
-    val jsonBody: JsObject = Json.obj(
-      "_id" -> "abcd",
-      "name" -> "test name",
-      "description" -> "test description",
-      "numSales" -> 100
-    )
+    "the mongo data creation failed" should {
 
-    "return an error" in {
+      val jsonBody: JsObject = Json.obj(
+        "_id" -> "abcd",
+        "name" -> "test name",
+        "description" -> "test description",
+        "numSales" -> 100
+      )
 
-      when(mockDataRepository.delete("_id": String))
-        .thenReturn(Future.failed(GenericDriverException("Error")))
+      "return an error" in {
 
-      val result = TestApplicationController.delete("_id": String)(FakeRequest())
+        when(mockDataRepository.delete("_id": String))
+          .thenReturn(Future.failed(GenericDriverException("Error")))
 
-      status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-      await(bodyOf(result)) shouldBe Json.obj("message" -> "Error adding item to Mongo").toString()
+        val result = TestApplicationController.delete("_id": String)(FakeRequest())
+
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        await(bodyOf(result)) shouldBe Json.obj("message" -> "Error adding item to Mongo").toString()
+      }
     }
   }
-
 }
