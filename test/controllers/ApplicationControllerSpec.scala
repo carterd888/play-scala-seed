@@ -126,7 +126,7 @@ class ApplicationControllerSpec extends UnitSpec with GuiceOneAppPerTest with Mo
   "ApplicationController .read()" should {
     "return OK" in {
 
-      when(mockDataRepository.read(any()))
+      when(mockDataRepository.read("_id": String))
         .thenReturn(Future(dataModel))
 
       val result = TestApplicationController.read("_id": String)(FakeRequest())
